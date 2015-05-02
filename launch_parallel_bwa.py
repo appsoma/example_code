@@ -11,7 +11,7 @@ with open( "params.json" ) as f:
 
 # EXTRACT the refernce genome
 os.mkdir( './outputs/extracted_reference_genome', 0777 )
-cmd_list = [ "tar", "xvf", params['reference_genome'], "-C", "./outputs/extracted_reference_genome" ]
+cmd_list = [ "tar", "xvf", './inputs/reference_genome', "-C", "./outputs/extracted_reference_genome" ]
 print "CMD", ' '.join( cmd_list )
 ret_code = call( cmd_list )
 if ret_code != 0:
