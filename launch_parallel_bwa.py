@@ -2,10 +2,15 @@ import re
 import json
 import os
 from welder_api import *
+from subprocess import call
 
 params = {}
 with open( "params.json" ) as f:
 	params = json.loads( f.read() )
+
+# EXTRACT the refernce genome
+os.mkdir( 'extracted_reference_genome', 0777 )
+call( [ "tar", "xvf", params['reference_genome'], "-C", "extracted_reference_genome" ] )
 
 task_folders = {}
 for file_path in params['fastq_files[]']:
@@ -14,7 +19,7 @@ for file_path in params['fastq_files[]']:
 	task_folders[file_path] = welder_run_task_add({
 		"name": "bwa-"+file_name,
 		"inputs": {
-			"reference_genome": params['reference_genome'],
+			"reference_genome": '$TASKS/launcher/outputs/extracted_reference_genome',
 			"fastq": file_path
 		},
 		#"command": 'echo "bwa aln -B '+params['barcode_length']+' -f ./outputs/out.sai reference_genome fastq"; echo 1 > ./outputs/out.sai',
@@ -50,7 +55,7 @@ for r1_file_path, r2_file_path in pairs[0].items():
 		sai1 = os.path.join(task_folders[r1_file_path],'outputs/out.sai'),
 		sai2 = os.path.join(task_folders[r2_file_path],'outputs/out.sai'),
 		inputs = {
-			"reference_genome": params['reference_genome'],
+			"reference_genome": '$TASKS/launcher/outputs/extracted_reference_genome',
 			"sai1": "$TASKS/bwa-"+r1_file_name+"/outputs/out.sai",
 			"sai2": "$TASKS/bwa-"+r2_file_name+"/outputs/out.sai",
 			"fastq1": r1_file_path,
@@ -61,7 +66,7 @@ for r1_file_path, r2_file_path in pairs[0].items():
 		# No mate exists, do a samse
 		sai1 = os.path.join(task_folders[r1_file_path],'outputs/out.sai'),
 		inputs = {
-			"reference_genome": params['reference_genome'],
+			"reference_genome": '$TASKS/launcher/outputs/extracted_reference_genome',
 			"sai1": "$TASKS/bwa-"+r1_file_name+"/outputs/out.sai",
 			"fastq1": r1_file_path,
 		}
