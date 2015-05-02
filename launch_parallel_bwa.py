@@ -1,7 +1,7 @@
 import re
 import json
 import os
-import welder_api
+from welder_api import *
 
 params = {}
 with open( "params.json" ) as f:
