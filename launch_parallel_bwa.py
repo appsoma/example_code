@@ -25,7 +25,7 @@ for file_path in params['fastq_files[]']:
 	task_folders[file_path] = welder_run_task_add({
 		"name": "bwa-"+file_name,
 		"inputs": {
-			"reference_genome": '$TASKS/launcher/outputs/extracted_reference_genome',
+			"reference_genome": '$TASKS/launcher/outputs/extracted_reference_genome/NC_010473.fa',
 			"fastq": file_path
 		},
 		#"command": 'echo "bwa aln -B '+params['barcode_length']+' -f ./outputs/out.sai reference_genome fastq"; echo 1 > ./outputs/out.sai',
