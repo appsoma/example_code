@@ -9,6 +9,9 @@ params = {}
 with open( "params.json" ) as f:
 	params = json.loads( f.read() )
 
+ref_genome_base_filename = params['reference_genome'].split('/')[-1]
+ref_genome_base_filename = ref_genome_base_filename.replace( '-index.tar.gz', '' )
+
 # EXTRACT the refernce genome
 os.mkdir( './outputs/extracted_reference_genome', 0777 )
 cmd_list = [ "tar", "xvf", './inputs/reference_genome', "-C", "./outputs/extracted_reference_genome" ]
@@ -28,8 +31,7 @@ for file_path in params['fastq_files[]']:
 			"reference_genome": '$TASKS/launcher/outputs/extracted_reference_genome',
 			"fastq": file_path
 		},
-		#"command": 'echo "bwa aln -B '+params['barcode_length']+' -f ./outputs/out.sai reference_genome fastq"; echo 1 > ./outputs/out.sai',
-		"command": 'bwa aln -B '+params['barcode_length']+' -f ./outputs/out.sai ./inputs/reference_genome ./inputs/fastq',
+		"command": 'bwa aln -B '+params['barcode_length']+' -f ./outputs/out.sai ./inputs/reference_genome/'+ref_genome_base_filename+' ./inputs/fastq',
 		"container_image": "bwa_and_sam/0",
 		"requirements": {
 			"cpus": 1,
@@ -67,7 +69,7 @@ for r1_file_path, r2_file_path in pairs[0].items():
 			"fastq1": r1_file_path,
 			"fastq2": r2_file_path
 		}
-		cmd = "bwa sampe -f ./outputs/out.sam ./inputs/reference_genome ./inputs/sai1 ./inputs/sai2 ./inputs/fastq1 ./inputs/fastq2"
+		cmd = "bwa sampe -f ./outputs/out.sam ./inputs/reference_genome/"+ref_genome_base_filename+" ./inputs/sai1 ./inputs/sai2 ./inputs/fastq1 ./inputs/fastq2"
 	else:
 		# No mate exists, do a samse
 		sai1 = os.path.join(task_folders[r1_file_path],'outputs/out.sai'),
@@ -76,7 +78,7 @@ for r1_file_path, r2_file_path in pairs[0].items():
 			"sai1": "$TASKS/bwa-"+r1_file_name+"/outputs/out.sai",
 			"fastq1": r1_file_path,
 		}
-		cmd = "bwa samse -f ./outputs/out.sam ./inputs/reference_genome ./inputs/sai1 ./inputs/fastq1"
+		cmd = "bwa samse -f ./outputs/out.sam ./inputs/reference_genome/"+ref_genome_base_filename+" ./inputs/sai1 ./inputs/fastq1"
 
 	welder_run_task_add({
 		"name": "sam-"+r1_file_name,
