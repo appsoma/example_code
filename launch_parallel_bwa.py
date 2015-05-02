@@ -9,8 +9,8 @@ with open( "params.json" ) as f:
 	params = json.loads( f.read() )
 
 # EXTRACT the refernce genome
-os.mkdir( 'extracted_reference_genome', 0777 )
-call( [ "tar", "xvf", params['reference_genome'], "-C", "extracted_reference_genome" ] )
+os.mkdir( './outputs/extracted_reference_genome', 0777 )
+call( [ "tar", "xvf", params['reference_genome'], "-C", "./outputs/extracted_reference_genome" ] )
 
 task_folders = {}
 for file_path in params['fastq_files[]']:
