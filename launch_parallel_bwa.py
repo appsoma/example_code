@@ -17,7 +17,8 @@ for file_path in params['fastq_files[]']:
 			"reference_genome": params['reference_genome'],
 			"fastq": file_path
 		},
-		"command": 'echo "bwa aln -B '+params['barcode_length']+' -f ./outputs/out.sai reference_genome fastq"; echo 1 > ./outputs/out.sai',
+		#"command": 'echo "bwa aln -B '+params['barcode_length']+' -f ./outputs/out.sai reference_genome fastq"; echo 1 > ./outputs/out.sai',
+		"command": 'bwa aln -B '+params['barcode_length']+' -f ./outputs/out.sai reference_genome fastq',
 		"container_image": "bwa_and_sam/0",
 		"requirements": {
 			"cpus": 1,
@@ -69,7 +70,8 @@ for r1_file_path, r2_file_path in pairs[0].items():
 	welder_run_task_add({
 		"name": "sam-"+r1_file_name,
 		"inputs": inputs,
-		"command": 'echo "'+cmd+'"',
+		#"command": 'echo "'+cmd+'"',
+		"command": cmd,
 		"container_image": "bwa_and_sam/0",
 		"requirements": {
 			"cpus": 1,
