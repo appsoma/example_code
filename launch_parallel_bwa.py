@@ -1,6 +1,7 @@
 import re
 import json
 import os
+import sys
 from welder_api import *
 from subprocess import call
 
@@ -12,7 +13,10 @@ with open( "params.json" ) as f:
 os.mkdir( './outputs/extracted_reference_genome', 0777 )
 cmd_list = [ "tar", "xvf", params['reference_genome'], "-C", "./outputs/extracted_reference_genome" ]
 print "CMD", ' '.join( cmd_list )
-call( cmd_list )
+ret_code = call( cmd_list )
+if ret_code != 0:
+	print "TAR FAILED"
+	sys.exit( 1 )
 
 task_folders = {}
 for file_path in params['fastq_files[]']:
