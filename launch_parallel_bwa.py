@@ -85,7 +85,9 @@ for r1_file_path, r2_file_path in pairs[0].items():
 		"inputs": inputs,
 		#"command": 'echo "'+cmd+'"',
 		"command": cmd,
-		"container_image": "bwa_and_sam/0",
+		"container": {
+			"url": "container-registry.appsoma.com/zack_cutadapt_macs2_bwa"
+		},
 		"requirements": {
 			"cpus": 1,
 			"mem": 512
