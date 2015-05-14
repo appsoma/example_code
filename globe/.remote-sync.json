@@ -1,0 +1,12 @@
+{
+  "transport": "scp",
+  "hostname": "mesos.appsoma.com",
+  "port": "22",
+  "username": "oink54321",
+  "keyfile": "/Users/ken/.ssh/id_rsa",
+  "target": "/home/oink54321/data/projects_demo/zack/apps/globe",
+  "ignore": [
+    ".git/**"
+  ],
+  "uploadOnSave": true
+}

@@ -1,0 +1,151 @@
+<!doctype html>
+<head>
+	<script src="/javascripts/welder.js"></script>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+	<script>
+		var $ = jQuery = require("jquery");
+		var h = require("hyperscript");
+		var welder = require("welder");
+		require("bootstrap");
+
+	function drawMap() {
+		var data = google.visualization.arrayToDataTable([
+			['Country', 'Population'],
+			['China', 'China: 1,363,800,000'],
+			['India', 'India: 1,242,620,000'],
+			['US', 'US: 317,842,000'],
+			['Indonesia', 'Indonesia: 247,424,598'],
+			['Brazil', 'Brazil: 201,032,714'],
+			['Pakistan', 'Pakistan: 186,134,000'],
+			['Nigeria', 'Nigeria: 173,615,000'],
+			['Bangladesh', 'Bangladesh: 152,518,015'],
+			['Russia', 'Russia: 146,019,512'],
+			['Japan', 'Japan: 127,120,000']
+		]);
+
+		var marker = 'worldpop/marker_green.png';
+		var options = {
+			showTip: true,
+      icons: {
+        default: {
+          normal:   marker,
+          selected: marker,
+        },
+        customMarker: {
+          normal:   marker,
+          selected: marker
+        }
+      }
+		};
+
+		var map = new google.visualization.Map(document.getElementById('chart_div'));
+
+		map.draw(data, options);
+	};
+
+	function drawForm(onSubmit) {
+		$("body").append(
+			h('.container',
+				h('h1','World Population Chart'),
+				h('form#main-form', { action:'', role:'form' },
+					h('fieldset',
+						h('div.form-group',
+							h('label','Show top N Countries'),
+							h('input.welder-file-picker',{name:'top_n'})
+						),
+						h('button.btn.btn-primary',{type:'submit'},"Submit")
+					)
+				),
+				h('#run-status'),
+				h('#result')
+			)
+		);
+		$("#main-form").submit( function() {
+			submitJob();
+		});
+	}
+
+	function submitJob() {
+
+		drawMap();
+
+		$(this).find('fieldset').prop('disabled',true);
+		var params = welder.formToObject( this );
+
+		welder.ajax.postJson(
+			"/api/v1/projects/"+welder.getCurrentProjectFromUrl()+"/runs",
+			{
+				"name": "world_population",
+				"params": params,
+				"tasks": [
+					{
+						"name": "do_nothing",
+						"command": "echo a",
+						"container_image": "fastqc/0",
+						"inputs": {
+							"top_n": "$PARAMS/top_n"
+						},
+						"code": [
+							{
+								"name": "tools",
+								"git": {
+									//"url": "git@github.com:appsoma/example_code.git"
+									"url": "git://github.com/appsoma/example_code.git"
+								}
+							}
+						],
+						"requirements": {
+							"cpus": 1,
+							"mem": 64
+						}
+					}
+				]
+			},
+			function( data ) {
+				welder.widgets.runStatus( "#run-status", {
+					runId: data.runId
+				});
+				welder.awaitRunComplete( data.project, data.runId, function(state) {
+					if( state == "SUCCESS" ) {
+						$("#result").append(
+							h('h2','Result'),
+							h("iframe",
+								{
+									src:data.runUrl+"/results/fastq_fastqc.html",
+									style:{width:'100%',height:'1000px'}
+								}
+							)
+						);
+					}
+				});
+			}
+		);
+		return false;
+	}
+
+	</script>
+</head>
+<body style='margin:10px;'>
+	<h1>World Population Chart</h1>
+	<div id='chart_div'></div>
+	<script type="text/javascript">
+		$(document).ready( function() {
+			welder.initWidgetsFromClasses();
+			welder.widgets.poweredBy();
+
+			google.load(
+				'visualization',
+				'1',
+				{
+					'packages': ['map'],
+					'callback': drawMap
+				}
+			);
+
+		});
+	</script>
+</body>
