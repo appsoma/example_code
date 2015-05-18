@@ -32,9 +32,7 @@ for file_path in params['fastq_files[]']:
 			"fastq": file_path
 		},
 		"command": 'bwa aln -B '+params['barcode_length']+' -f ./outputs/out.sai ./inputs/reference_genome/'+ref_genome_base_filename+' ./inputs/fastq',
-		"container": {
-			"url": "container-registry.appsoma.com/zack_cutadapt_macs2_bwa"
-		},
+		"container_image": "container-registry.appsoma.com/zack_cutadapt_macs2_bwa",
 		"requirements": {
 			"cpus": 1,
 			"mem": 512
@@ -87,9 +85,7 @@ for r1_file_path, r2_file_path in pairs[0].items():
 		"inputs": inputs,
 		#"command": 'echo "'+cmd+'"',
 		"command": cmd,
-		"container": {
-			"url": "container-registry.appsoma.com/zack_cutadapt_macs2_bwa"
-		},
+		"container_image": "container-registry.appsoma.com/zack_cutadapt_macs2_bwa",
 		"requirements": {
 			"cpus": 1,
 			"mem": 512
