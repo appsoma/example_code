@@ -35,7 +35,8 @@ for file_path in params['fastq_files[]']:
 		"container_image": "container-registry.appsoma.com/zack_cutadapt_macs2_bwa",
 		"requirements": {
 			"cpus": 1,
-			"mem": 512
+			"mem": 512,
+			"disk":512
 		}
 	})
 
@@ -88,7 +89,8 @@ for r1_file_path, r2_file_path in pairs[0].items():
 		"container_image": "container-registry.appsoma.com/zack_cutadapt_macs2_bwa",
 		"requirements": {
 			"cpus": 1,
-			"mem": 512
+			"mem": 512,
+			"disk":512
 		}
 	})
 
