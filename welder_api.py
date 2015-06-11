@@ -147,6 +147,6 @@ def welder_run_task_add( task_object ):
 	run_id = os.environ['WELDER_RUN_ID']
 	project = os.environ['WELDER_PROJECT']
 	url = os.environ['WELDER_URL'] + "/api/v1/projects/"+project+"/runs/"+run_id+"/tasks"
-	ret = http( url, data=json.dumps(task_object), action="POST", headers={'Content-Type':'application/json','welder-auth':key} )
+	ret = http( url, data=json.dumps(task_object), action="POST", headers={'Content-Type':'application/json','welder_key':key} )
 	return json.loads(ret)['taskFolder']
 
