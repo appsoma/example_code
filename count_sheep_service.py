@@ -17,8 +17,8 @@ if m:
 	ip = m.group(1)
 
 html = ""
-html += "<h1>This is a web service running on port: "+port+"</h1>\n"
-html += "<a href='http://"+ip+":"+port+"'>Go to it now</a>\n"
+html += "<h1>This is a web service running on port: "+str(port)+"</h1>\n"
+html += "<a href='http://"+ip+":"+str(port)+"'>Go to it now</a>\n"
 
 with open( "../results/index.html", "w" ) as f:
 	f.write( html )
