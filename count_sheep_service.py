@@ -8,7 +8,7 @@ with open( "service.pid", "w" ) as f:
 	f.write( str(os.getpid()) )
 
 with open( "params.json", "r" ) as f:
-	params = json.loads( r.read() )
+	params = json.loads( f.read() )
 
 if sys.argv[1:]:
     port = int(sys.argv[1])
