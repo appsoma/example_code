@@ -20,7 +20,7 @@ html = ""
 html += "<h1>This is a web service running on port: "+str(port)+"</h1>\n"
 html += "<a href='http://"+ip+":"+str(port)+"'>Go to it now</a>\n"
 
-with open( "../results/index.html", "w" ) as f:
+with open( "./results/index.html", "w" ) as f:
 	f.write( html )
 
 class Handler(BaseHTTPRequestHandler):
