@@ -1,15 +1,27 @@
 import sys
 import os
+import re
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
 with open( "service.pid", "w" ) as f:
 	f.write( str(os.getpid()) )
 
-
 if sys.argv[1:]:
     port = int(sys.argv[1])
 else:
     port = 8900
+
+ip = os.environ['WELDER_SITE_URL']
+m = re.match( r'^.+//([^:]+)' )
+if m:
+	ip = m.group(1)
+
+html = ""
+html += "<h1>This is a web service running on port: "+port+"</h1>\n"
+html += "<a href='http://"+ip+":"+port+"'>Go to it now</a>\n"
+
+with open( "../results/index.html", "w" ) as f:
+	f.write( html )
 
 class Handler(BaseHTTPRequestHandler):
 	def do_GET(self):
