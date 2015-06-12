@@ -12,7 +12,7 @@ else:
     port = 8900
 
 ip = os.environ['WELDER_SITE_URL']
-m = re.match( r'^.+//([^:]+)' )
+m = re.match( r'^.+//([^:]+)', ip )
 if m:
 	ip = m.group(1)
 
