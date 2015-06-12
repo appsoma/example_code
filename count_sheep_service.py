@@ -1,5 +1,10 @@
 import sys
+import os
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
+
+with open( "service.pid", "w" ) as f:
+	f.write( str(os.getpid()) )
+
 
 if sys.argv[1:]:
     port = int(sys.argv[1])
