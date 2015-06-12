@@ -32,7 +32,7 @@ class Handler(BaseHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header('Content-type','text/html')
 		self.end_headers()
-		self.wfile.write( "The service is up. The parameter 'sheep_count' is:"+params['sheep_count'] )
+		self.wfile.write( "The service is up. The parameter 'to_print' is:"+params['to_print'] )
 
 
 httpd = HTTPServer( ('0.0.0.0', port), Handler )
