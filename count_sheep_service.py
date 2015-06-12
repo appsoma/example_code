@@ -1,10 +1,14 @@
 import sys
 import os
 import re
+import json
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
 with open( "service.pid", "w" ) as f:
 	f.write( str(os.getpid()) )
+
+with open( "params.json", "r" ) as f:
+	params = json.loads( r.read() )
 
 if sys.argv[1:]:
     port = int(sys.argv[1])
@@ -28,7 +32,7 @@ class Handler(BaseHTTPRequestHandler):
 		self.send_response(200)
 		self.send_header('Content-type','text/html')
 		self.end_headers()
-		self.wfile.write( "The service is up" )
+		self.wfile.write( "The service is up. The parameter 'sheep_count' is:"+params['sheep_count'] )
 
 
 httpd = HTTPServer( ('0.0.0.0', port), Handler )
